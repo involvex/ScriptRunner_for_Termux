@@ -22,6 +22,7 @@ fun SettingsRoute(
     onNavigateToCustomTheme: () -> Unit,
     onNavigateToExecutionHistory: () -> Unit,
     onNavigateToWebhookSettings: () -> Unit,
+    onNavigateToTemplates: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -75,6 +76,7 @@ fun SettingsRoute(
             onNavigateToCustomTheme = onNavigateToCustomTheme,
             onNavigateToExecutionHistory = onNavigateToExecutionHistory,
             onNavigateToWebhookSettings = onNavigateToWebhookSettings,
+            onNavigateToTemplates = onNavigateToTemplates,
         )
 
     SettingsScreen(

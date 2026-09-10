@@ -487,4 +487,21 @@
     <!-- General -->
     <string name="copied_label">Copied!</string>
     <string name="execution_history_label">Execution History</string>
+    <string name="webhook_how_to_use">How to Use</string>
+    <string name="webhook_post_request_title">POST Request (JSON Body)</string>
+    <string name="webhook_post_request_body" translatable="false">{ &quot;script_id&quot;: 1, &quot;arguments&quot;: [&quot;arg1&quot;, &quot;arg2&quot;] }</string>
+    <string name="webhook_trigger_title">Trigger from Termux</string>
+    <string name="webhook_trigger_example" translatable="false">curl -X POST http://127.0.0.1:%1$s/trigger/script/%2$s -H &quot;Authorization: Bearer YOUR_TOKEN&quot; -d &quot;{ &quot;script_id&quot;: 1 }&quot;</string>
+    <string name="webhook_trigger_hint">Use the above command from a Termux session to trigger scripts remotely.</string>
+    <string name="script_output_title">Script Output</string>
+    <string name="script_output_duration">Duration</string>
+    <string name="script_output_stdout_tab">Output</string>
+    <string name="script_output_stderr_tab">Errors</string>
+    <string name="script_output_no_output">No output available</string>
+    <string name="script_output_copy">Copy output</string>
+    <string name="script_output_copied">Copied!</string>
+    <string name="templates_nav">Templates</string>
+    <string name="templates_title">Templates Library</string>
+    <string name="template_search_placeholder">Search templates...</string>
+    <string name="template_no_results">No templates found matching your search</string>
 </resources>

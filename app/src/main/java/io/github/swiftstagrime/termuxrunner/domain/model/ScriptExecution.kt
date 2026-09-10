@@ -18,6 +18,8 @@ data class ScriptExecution(
     val runtimeArgs: String? = null,
     val source: ExecutionSource = ExecutionSource.MANUAL,
     val errorMessage: String? = null,
+    val stdout: String? = null,
+    val stderr: String? = null,
 ) {
     val isSuccess: Boolean
         get() = exitCode == 0

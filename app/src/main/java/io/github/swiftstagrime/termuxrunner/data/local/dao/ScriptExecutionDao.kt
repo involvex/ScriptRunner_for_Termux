@@ -44,6 +44,9 @@ interface ScriptExecutionDao {
     @Query("SELECT COUNT(*) FROM script_executions WHERE exitCode != 0")
     fun getFailureCount(): Flow<Int>
 
+    @Query("SELECT * FROM script_executions WHERE id = :id")
+    suspend fun getExecutionById(id: Long): ScriptExecutionEntity?
+
     @Query("SELECT COUNT(*) FROM script_executions")
     fun getTotalCount(): Flow<Int>
 }

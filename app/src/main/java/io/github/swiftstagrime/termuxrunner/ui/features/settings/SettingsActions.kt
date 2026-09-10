@@ -15,4 +15,5 @@ data class SettingsActions(
     val onNavigateToCustomTheme: () -> Unit,
     val onNavigateToExecutionHistory: () -> Unit,
     val onNavigateToWebhookSettings: () -> Unit,
+    val onNavigateToTemplates: () -> Unit,
 )

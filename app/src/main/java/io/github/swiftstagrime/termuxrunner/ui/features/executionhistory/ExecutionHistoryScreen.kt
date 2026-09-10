@@ -1,6 +1,7 @@
 package io.github.swiftstagrime.termuxrunner.ui.features.executionhistory
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,6 +60,7 @@ fun ExecutionHistoryScreen(
     onBack: () -> Unit,
     scriptName: String? = null,
     viewModel: ExecutionHistoryViewModel = hiltViewModel(),
+    onNavigateToOutput: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -117,7 +119,7 @@ fun ExecutionHistoryScreen(
                 }
 
                 else -> {
-                    ExecutionHistoryList(uiState.executions)
+                    ExecutionHistoryList(uiState.executions, onNavigateToOutput)
                 }
             }
         }
@@ -174,7 +176,10 @@ private fun ExecutionHistoryTopBar(
 }
 
 @Composable
-private fun ExecutionHistoryList(executions: List<ScriptExecution>) {
+private fun ExecutionHistoryList(
+    executions: List<ScriptExecution>,
+    onNavigateToOutput: (Long) -> Unit = {},
+) {
     LazyColumn(
         modifier =
             Modifier
@@ -183,15 +188,21 @@ private fun ExecutionHistoryList(executions: List<ScriptExecution>) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(executions, key = { it.id }) { execution ->
-            ExecutionHistoryCard(execution)
+            ExecutionHistoryCard(
+                execution = execution,
+                onNavigateToOutput = onNavigateToOutput,
+            )
         }
     }
 }
 
 @Composable
-private fun ExecutionHistoryCard(execution: ScriptExecution) {
+private fun ExecutionHistoryCard(
+    execution: ScriptExecution,
+    onNavigateToOutput: (Long) -> Unit = {},
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onNavigateToOutput(execution.id) },
         shape = RoundedCornerShape(16.dp),
     ) {
         Row(

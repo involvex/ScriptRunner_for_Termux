@@ -41,6 +41,8 @@ class ScriptExecutionRepositoryImpl
         override fun getFailureCount(): Flow<Int> = dao.getFailureCount()
 
         override fun getTotalCount(): Flow<Int> = dao.getTotalCount()
+
+        override suspend fun getExecutionById(id: Long): ScriptExecution? = dao.getExecutionById(id)?.toDomain()
     }
 
 private fun ScriptExecution.toEntity() =
@@ -61,4 +63,6 @@ private fun ScriptExecution.toEntity() =
                 ExecutionSource.SHORTCUT -> ScriptExecutionEntity.ExecutionSource.SHORTCUT
             },
         errorMessage = errorMessage,
+        stdout = stdout,
+        stderr = stderr,
     )

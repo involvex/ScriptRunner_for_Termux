@@ -29,11 +29,15 @@ class TermuxResultReceiver : BroadcastReceiver() {
 
         var exitCode = -1337
         var internalError: String? = null
+        var stdout: String? = null
+        var stderr: String? = null
 
         val bundle = intent.getBundleExtra("result")
         if (bundle != null) {
             exitCode = bundle.getInt("exitCode", -1337)
             internalError = bundle.getString("errmsg")
+            stdout = bundle.getString("stdout")
+            stderr = bundle.getString("stderr")
         } else if (intent.hasExtra("com.termux.RUN_COMMAND_RESULT_CODE")) {
             exitCode = intent.getIntExtra("com.termux.RUN_COMMAND_RESULT_CODE", -1337)
             internalError = intent.getStringExtra("com.termux.RUN_COMMAND_ERRMSG")
@@ -48,6 +52,8 @@ class TermuxResultReceiver : BroadcastReceiver() {
                     scriptName = scriptName,
                     exitCode = exitCode,
                     internalError = internalError,
+                    stdout = stdout,
+                    stderr = stderr,
                 )
             } finally {
                 pendingResult.finish()

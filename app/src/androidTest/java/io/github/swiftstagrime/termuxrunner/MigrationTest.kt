@@ -6,9 +6,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.swiftstagrime.termuxrunner.data.local.AppDatabase
 import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_6_7
 import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_7_8
+import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_8_9
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -383,5 +385,44 @@ class MigrationTest {
             "timestamp column should exist in script_versions",
             versionColumnNames.contains("timestamp"),
         )
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun migrate8To9_addsStdoutAndStderrColumns() {
+        var db =
+            helper.createDatabase(testDb, 8).apply {
+                execSQL(
+                    """
+                    INSERT INTO scripts (id, name, codePages, page_names, interpreter, fileExtension, commandPrefix,
+                    runInBackground, openNewSession, executionParams, envVars, keepSessionOpen,
+                    useHeartbeat, heartbeatTimeout, heartbeatInterval, categoryId, orderIndex,
+                    notifyOnResult, interactionMode, argumentPresets, prefixPresets, envVarPresets, adbCode,
+                    notificationActions, foregroundSessionBehavior, reuseSession)
+                    VALUES (1, 'V8 Exec Test Script', '["echo test"]', '[]', 'bash', '.sh', '', 0, 1, '', '{}', 0,
+                    0, 30000, 10000, null, 0, 0, 'NONE', '', '', '', null, '', 'KEEP_OPEN', 0)
+                    """.trimIndent(),
+                )
+                execSQL(
+                    """
+                    INSERT INTO script_executions (scriptId, scriptName, timestamp, exitCode, source)
+                    VALUES (1, 'V8 Exec Test Script', 1672531200000, 0, 'MANUAL')
+                    """.trimIndent(),
+                )
+                close()
+            }
+
+        db = helper.runMigrationsAndValidate(testDb, 9, true, MIGRATION_8_9)
+
+        val cursor = db.query("SELECT * FROM script_executions WHERE scriptId = 1")
+        assertTrue(cursor.moveToFirst())
+
+        assertEquals(-1 != cursor.getColumnIndex("stdout"), true)
+        assertEquals(-1 != cursor.getColumnIndex("stderr"), true)
+
+        assertNull(cursor.getString(cursor.getColumnIndexOrThrow("stdout")))
+        assertNull(cursor.getString(cursor.getColumnIndexOrThrow("stderr")))
+
+        cursor.close()
     }
 }

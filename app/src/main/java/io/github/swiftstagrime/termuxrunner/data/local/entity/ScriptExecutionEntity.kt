@@ -20,6 +20,8 @@ data class ScriptExecutionEntity(
     val runtimeArgs: String? = null,
     val source: ExecutionSource = ExecutionSource.MANUAL,
     val errorMessage: String? = null,
+    val stdout: String? = null,
+    val stderr: String? = null,
 ) {
     enum class ExecutionSource(
         val value: String,
@@ -70,4 +72,6 @@ fun DomainScriptExecution.toEntity() =
                 DomainExecutionSource.SHORTCUT -> ScriptExecutionEntity.ExecutionSource.SHORTCUT
             },
         errorMessage = errorMessage,
+        stdout = stdout,
+        stderr = stderr,
     )

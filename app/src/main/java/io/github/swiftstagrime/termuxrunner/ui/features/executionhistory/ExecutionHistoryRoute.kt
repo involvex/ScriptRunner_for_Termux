@@ -8,6 +8,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 fun ExecutionHistoryRoute(
     onBack: () -> Unit,
     scriptId: Int? = null,
+    onNavigateToOutput: (Long) -> Unit = {},
 ) {
     val viewModel: ExecutionHistoryViewModel = hiltViewModel()
 
@@ -19,5 +20,6 @@ fun ExecutionHistoryRoute(
         onBack = onBack,
         scriptName = null,
         viewModel = viewModel,
+        onNavigateToOutput = onNavigateToOutput,
     )
 }

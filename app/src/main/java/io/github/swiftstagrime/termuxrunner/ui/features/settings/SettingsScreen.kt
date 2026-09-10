@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Description
@@ -129,6 +130,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 WebhookNavTile(actions)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TemplatesNavTile(actions)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -346,6 +351,43 @@ private fun WebhookNavTile(actions: SettingsActions) {
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = stringResource(R.string.webhook_settings_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TemplatesNavTile(actions: SettingsActions) {
+    Card(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { actions.onNavigateToTemplates() },
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.AutoStories,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = stringResource(R.string.templates_nav),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.weight(1f),
@@ -614,6 +656,7 @@ fun PreviewSettingsScreen() {
                     onNavigateToCustomTheme = {},
                     onNavigateToExecutionHistory = {},
                     onNavigateToWebhookSettings = {},
+                    onNavigateToTemplates = {},
                 ),
         )
     }

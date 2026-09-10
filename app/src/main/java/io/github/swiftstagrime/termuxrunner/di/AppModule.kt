@@ -32,6 +32,7 @@ import io.github.swiftstagrime.termuxrunner.data.repository.ScriptVersionReposit
 import io.github.swiftstagrime.termuxrunner.data.repository.ShortcutRepositoryImpl
 import io.github.swiftstagrime.termuxrunner.data.repository.TermuxRepositoryImpl
 import io.github.swiftstagrime.termuxrunner.data.repository.UserPreferencesRepositoryImpl
+import io.github.swiftstagrime.termuxrunner.data.template.ScriptTemplateRepositoryImpl
 import io.github.swiftstagrime.termuxrunner.domain.repository.AutomationChainRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.AutomationLogRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.AutomationRepository
@@ -43,6 +44,7 @@ import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptExecutionRep
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptFileRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptResultNotificator
+import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptTemplateRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptVersionRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.ShortcutRepository
 import io.github.swiftstagrime.termuxrunner.domain.repository.TermuxRepository
@@ -161,6 +163,10 @@ object AppModule {
     fun provideWidgetUpdater(
         @ApplicationContext context: Context,
     ): WidgetUpdater = WidgetManager(context)
+
+    @Provides
+    @Singleton
+    fun provideScriptTemplateRepository(): ScriptTemplateRepository = ScriptTemplateRepositoryImpl()
 
     @Provides
     @PackageName

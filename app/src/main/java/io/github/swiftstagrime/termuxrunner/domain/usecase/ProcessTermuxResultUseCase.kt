@@ -46,6 +46,8 @@ class ProcessTermuxResultUseCase
             scriptName: String,
             exitCode: Int,
             internalError: String?,
+            stdout: String? = null,
+            stderr: String? = null,
         ) {
             val timestamp = System.currentTimeMillis()
             val tokens = executionStartTimes[scriptId]
@@ -83,6 +85,8 @@ class ProcessTermuxResultUseCase
                     durationMs = durationMs,
                     source = if (automationId != -1) ExecutionSource.AUTOMATION else ExecutionSource.MANUAL,
                     errorMessage = internalError,
+                    stdout = stdout,
+                    stderr = stderr,
                 ),
             )
 

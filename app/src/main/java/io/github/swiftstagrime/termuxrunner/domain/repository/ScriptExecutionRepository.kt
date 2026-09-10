@@ -21,4 +21,6 @@ interface ScriptExecutionRepository {
     fun getFailureCount(): Flow<Int>
 
     fun getTotalCount(): Flow<Int>
+
+    suspend fun getExecutionById(id: Long): ScriptExecution?
 }

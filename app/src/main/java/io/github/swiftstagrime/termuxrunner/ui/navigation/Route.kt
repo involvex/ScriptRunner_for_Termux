@@ -40,4 +40,12 @@ sealed interface Route : NavKey {
 
     @Serializable
     data object WebhookSettings : Route
+
+    @Serializable
+    data class ScriptOutput(
+        val executionId: Long,
+    ) : Route
+
+    @Serializable
+    data object Templates : Route
 }
