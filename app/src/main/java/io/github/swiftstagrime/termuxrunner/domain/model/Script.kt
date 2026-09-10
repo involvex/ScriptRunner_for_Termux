@@ -74,6 +74,7 @@ data class Script(
     val envVarPresets: List<String> = emptyList(),
     val adbCode: String? = null,
     val notificationActions: List<NotificationAction> = emptyList(),
+    val executionTimeoutMs: Long? = null,
 ) : Parcelable {
     /**
      * Computed property that concatenates all code pages into a single string,
@@ -110,6 +111,7 @@ data class Script(
             envVarPresets: List<String> = emptyList(),
             adbCode: String? = null,
             notificationActions: List<NotificationAction> = emptyList(),
+            executionTimeoutMs: Long? = null,
         ): Script =
             Script(
                 id = id,
@@ -138,6 +140,8 @@ data class Script(
                 envVarPresets = envVarPresets,
                 adbCode = adbCode,
                 notificationActions = notificationActions,
+                executionTimeoutMs = executionTimeoutMs,
             )
     }
 }
+

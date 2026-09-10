@@ -53,6 +53,8 @@ data class ScriptEntity(
     val foregroundSessionBehavior: ForegroundSessionBehavior = ForegroundSessionBehavior.KEEP_OPEN,
     @ColumnInfo(defaultValue = "0")
     val reuseSession: Boolean = false,
+    @ColumnInfo(defaultValue = "NULL")
+    val executionTimeoutMs: Long? = null,
 ) {
     fun toScriptDomain(): Script =
         Script(
@@ -115,4 +117,6 @@ fun Script.toScriptEntity(): ScriptEntity =
         notificationActions = notificationActions,
         foregroundSessionBehavior = foregroundSessionBehavior,
         reuseSession = reuseSession,
+        executionTimeoutMs = executionTimeoutMs,
     )
+

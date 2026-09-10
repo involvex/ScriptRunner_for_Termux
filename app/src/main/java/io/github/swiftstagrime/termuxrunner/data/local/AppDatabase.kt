@@ -37,7 +37,7 @@ import org.json.JSONArray
         AutomationChainEntity::class,
         ScriptVersionEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -286,5 +286,12 @@ val MIGRATION_8_9: Migration =
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE script_executions ADD COLUMN stdout TEXT DEFAULT NULL")
             database.execSQL("ALTER TABLE script_executions ADD COLUMN stderr TEXT DEFAULT NULL")
+        }
+    }
+
+val MIGRATION_9_10: Migration =
+    object : Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE scripts ADD COLUMN executionTimeoutMs INTEGER DEFAULT NULL")
         }
     }

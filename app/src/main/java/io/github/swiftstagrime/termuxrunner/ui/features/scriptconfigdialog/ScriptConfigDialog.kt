@@ -904,6 +904,24 @@ private fun ReliabilitySection(
                 )
             }
         }
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        StyledTextField(
+            value = state.executionTimeoutMs,
+            onValueChange = { if (it.all { c -> c.isDigit() }) state.executionTimeoutMs = it },
+            label = stringResource(R.string.execution_timeout_ms_hint),
+            supportingText = {
+                Text(
+                    text = stringResource(R.string.execution_timeout_desc),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -1064,3 +1082,4 @@ private fun PreviewConfigDialogLight() {
         )
     }
 }
+

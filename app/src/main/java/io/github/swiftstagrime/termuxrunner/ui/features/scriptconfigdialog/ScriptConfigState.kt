@@ -25,6 +25,7 @@ class ScriptConfigState(
     var useHeartbeat by mutableStateOf(script.useHeartbeat)
     var heartbeatInterval by mutableStateOf((script.heartbeatInterval / MS_TO_S).toString())
     var heartbeatTimeout by mutableStateOf((script.heartbeatTimeout / MS_TO_S).toString())
+    var executionTimeoutMs by mutableStateOf(script.executionTimeoutMs?.toString() ?: "")
     var runInBackground by mutableStateOf(script.runInBackground)
     var foregroundSessionBehavior by mutableStateOf(script.foregroundSessionBehavior)
     var reuseSession by mutableStateOf(script.reuseSession)
@@ -86,5 +87,10 @@ class ScriptConfigState(
                 notificationActions
                     .filter { it.first.isNotBlank() && it.second > 0 }
                     .map { (label, targetId) -> NotificationAction(label, targetId) },
+            executionTimeoutMs =
+                executionTimeoutMs.toLongOrNull()
+                    ?.coerceAtLeast(1)
+                    ?.times(1000),
         )
 }
+

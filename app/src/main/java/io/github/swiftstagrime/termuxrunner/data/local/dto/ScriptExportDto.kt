@@ -37,6 +37,7 @@ data class ScriptExportDto(
     val notificationActions: List<NotificationAction> = emptyList(),
     val foregroundSessionBehavior: ForegroundSessionBehavior = ForegroundSessionBehavior.KEEP_OPEN,
     val reuseSession: Boolean = false,
+    val executionTimeoutMs: Long? = null,
 )
 
 fun Script.toExportDto(base64Icon: String?): ScriptExportDto =
@@ -68,6 +69,7 @@ fun Script.toExportDto(base64Icon: String?): ScriptExportDto =
         notificationActions = notificationActions,
         foregroundSessionBehavior = foregroundSessionBehavior,
         reuseSession = reuseSession,
+        executionTimeoutMs = executionTimeoutMs,
     )
 
 fun ScriptExportDto.toEntity(
@@ -115,5 +117,7 @@ fun ScriptExportDto.toEntity(
         notificationActions = notificationActions,
         foregroundSessionBehavior = foregroundSessionBehavior,
         reuseSession = reuseSession,
+        executionTimeoutMs = executionTimeoutMs,
     )
 }
+

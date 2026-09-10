@@ -7,6 +7,7 @@ import io.github.swiftstagrime.termuxrunner.data.local.AppDatabase
 import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_6_7
 import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_7_8
 import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_8_9
+import io.github.swiftstagrime.termuxrunner.data.local.MIGRATION_9_10
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Assert.assertNotEquals
@@ -422,6 +423,36 @@ class MigrationTest {
 
         assertNull(cursor.getString(cursor.getColumnIndexOrThrow("stdout")))
         assertNull(cursor.getString(cursor.getColumnIndexOrThrow("stderr")))
+
+        cursor.close()
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun migrate9To10_addsExecutionTimeoutMsColumn() {
+        var db =
+            helper.createDatabase(testDb, 9).apply {
+                execSQL(
+                    """
+                    INSERT INTO scripts (id, name, codePages, page_names, interpreter, fileExtension, commandPrefix,
+                    runInBackground, openNewSession, executionParams, envVars, keepSessionOpen,
+                    useHeartbeat, heartbeatTimeout, heartbeatInterval, categoryId, orderIndex,
+                    notifyOnResult, interactionMode, argumentPresets, prefixPresets, envVarPresets, adbCode,
+                    notificationActions, foregroundSessionBehavior, reuseSession)
+                    VALUES (1, 'V9 Timeout Test Script', '["echo hello"]', '[]', 'bash', '.sh', '', 0, 1, '', '{}', 0,
+                    0, 30000, 10000, null, 0, 0, 'NONE', '', '', '', null, '', 'KEEP_OPEN', 0)
+                    """.trimIndent(),
+                )
+                close()
+            }
+
+        db = helper.runMigrationsAndValidate(testDb, 10, true, MIGRATION_9_10)
+
+        val cursor = db.query("SELECT * FROM scripts WHERE id = 1")
+        assertTrue(cursor.moveToFirst())
+
+        assertEquals(-1 != cursor.getColumnIndex("executionTimeoutMs"), true)
+        assertNull(cursor.getString(cursor.getColumnIndexOrThrow("executionTimeoutMs")))
 
         cursor.close()
     }

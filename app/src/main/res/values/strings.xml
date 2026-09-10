@@ -186,6 +186,8 @@
     <string name="advanced_timings">Advanced Timings</string>
     <string name="pulse_interval_s">Pulse Interval (s)</string>
     <string name="timeout_limit_s">Timeout Limit (s)</string>
+    <string name="execution_timeout_ms_hint">Execution Timeout (seconds)</string>
+    <string name="execution_timeout_desc">Optional: Kills the script after this many seconds. Leave blank for no limit.</string>
     <string name="pulse_how_often_the_script_signals_it_is_alive_timeout_restart_if_no_signal_received_after_this_time">Pulse: How often the script signals it is alive.\nTimeout: Restart if no signal received after this time.</string>
     <string name="experimental_warning">With python installed runs as socket monitor. Without python defaults to Lazarus mode and wastes battery - Install python for better experience.</string>
     <string name="btn_add_variable">Add Variable</string>

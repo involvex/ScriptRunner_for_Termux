@@ -198,8 +198,10 @@ except:
             val escapedArgs = escapeForBashDoubleQuotes(combinedArgs)
             val escapedEnvVars = escapeForSingleQuotedBash(envVars)
 
+            val timeoutPrefix =
+                script.executionTimeoutMs?.let { "timeout ${it / 1000} " } ?: ""
             val coreExecution =
-                "$escapedEnvVars$escapedPrefix$escapedInterpreter $fullPath $escapedArgs"
+                "$escapedEnvVars$escapedPrefix${timeoutPrefix}$escapedInterpreter $fullPath $escapedArgs"
 
             return StringBuilder()
                 .append("mkdir -p $tempDir && ")
@@ -241,8 +243,10 @@ except:
             val escapedArgs = escapeForBashDoubleQuotes(combinedArgs)
             val escapedEnvVars = escapeForSingleQuotedBash(envVars)
 
+            val timeoutPrefix =
+                script.executionTimeoutMs?.let { "timeout ${it / 1000} " } ?: ""
             val coreExecution =
-                "$escapedEnvVars$escapedPrefix$escapedInterpreter $termuxDestPath $escapedArgs"
+                "$escapedEnvVars$escapedPrefix${timeoutPrefix}$escapedInterpreter $termuxDestPath $escapedArgs"
 
             return StringBuilder()
                 .append("mkdir -p ~/scriptrunner_for_termux && ")
@@ -297,3 +301,4 @@ except:
                 """.trimIndent()
         }
     }
+
