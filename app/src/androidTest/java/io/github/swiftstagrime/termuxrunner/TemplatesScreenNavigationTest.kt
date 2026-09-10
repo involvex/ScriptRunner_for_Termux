@@ -95,6 +95,24 @@ class TemplatesScreenNavigationTest {
         composeTestRule
             .onNodeWithText("Hello World")
             .assertIsDisplayed()
+
+        composeTestRule.waitUntil(timeoutMillis = 10_000) {
+            try {
+                composeTestRule.onNodeWithText("Simple Backup Script").assertIsDisplayed()
+                false
+            } catch (_: Throwable) {
+                true
+            }
+        }
+
+        composeTestRule.waitUntil(timeoutMillis = 10_000) {
+            try {
+                composeTestRule.onNodeWithText("Data Processing").assertIsDisplayed()
+                false
+            } catch (_: Throwable) {
+                true
+            }
+        }
     }
 
     @Test

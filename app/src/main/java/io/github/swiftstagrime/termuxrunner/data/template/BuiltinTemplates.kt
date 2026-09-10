@@ -8,49 +8,161 @@ val BUILTIN_TEMPLATES =
             id = "bash_hello",
             name = "Hello World",
             description = "A simple bash script that prints a greeting",
-            content = "#!/bin/bash\necho 'Hello, World!'\n",
+            content = """
+                #!/bin/bash
+                echo 'Hello, World!'
+            """.trimIndent(),
             category = "bash",
         ),
         ScriptTemplate(
             id = "bash_backup",
             name = "Simple Backup Script",
             description = "Compresses a directory into a timestamped backup",
-            content = "#!/bin/bash\nSOURCE_DIR=${'$'}{1:-${'$'}HOME}\nBACKUP_DIR=${'$'}HOME/backups\nTIMESTAMP=${'$'}(date +\"%Y%m%d_%H%M%S\")\nmkdir -p \"${'$'}BACKUP_DIR\"\ntar -czf \"${'$'}BACKUP_DIR/backup_${'$'}TIMESTAMP.tar.gz\" \"${'$'}SOURCE_DIR\"\necho \"Backup created: ${'$'}BACKUP_DIR/backup_${'$'}TIMESTAMP.tar.gz\"\n",
+            content = """
+                #!/bin/bash
+                SOURCE_DIR=${'$'}{1:-${'$'}HOME}
+                BACKUP_DIR=${'$'}HOME/backups
+                TIMESTAMP=${'$'}(date +"%Y%m%d_%H%M%S")
+                mkdir -p "${'$'}BACKUP_DIR"
+                tar -czf "${'$'}BACKUP_DIR/backup_${'$'}TIMESTAMP.tar.gz" "${'$'}SOURCE_DIR"
+                echo "Backup created: ${'$'}BACKUP_DIR/backup_${'$'}TIMESTAMP.tar.gz"
+            """.trimIndent(),
             category = "bash",
         ),
         ScriptTemplate(
             id = "bash_network_check",
             name = "Network Availability Check",
             description = "Checks if specific URLs are reachable",
-            content = "#!/bin/bash\nURLS=('https://google.com' 'https://github.com' 'https://example.com')\nfor url in \"${'$'}{URLS[@]}\"; do\n    if curl -s --connect-timeout 5 \"${'$'}url\" > /dev/null; then\n        echo \"OK: ${'$'}url\"\n    else\n        echo \"FAIL: ${'$'}url\"\n    fi\ndone\n",
+            content = """
+                #!/bin/bash
+                URLS=('https://google.com' 'https://github.com' 'https://example.com')
+                for url in "${'$'}{URLS[@]}"; do
+                    if curl -s --connect-timeout 5 "${'$'}url" > /dev/null; then
+                        echo "OK: ${'$'}url"
+                    else
+                        echo "FAIL: ${'$'}url"
+                    fi
+                done
+            """.trimIndent(),
             category = "bash",
         ),
         ScriptTemplate(
             id = "python_data_processing",
             name = "Data Processing",
             description = "Python script template for data processing tasks",
-            content = "#!/usr/bin/env python3\nimport sys\nfrom pathlib import Path\n\ndef process_file(filepath: str) -> dict:\n    '''Process a file and return results.'''\n    path = Path(filepath)\n    if not path.exists():\n        print(f'Error: {filepath} not found', file=sys.stderr)\n        return {'status': 'error', 'message': f'{filepath} not found'}\n\n    content = path.read_text()\n    lines = len(content.splitlines())\n    words = len(content.split())\n\n    return {\n        'status': 'success',\n        'filename': path.name,\n        'lines': lines,\n        'words': words,\n    }\n\nif __name__ == '__main__':\n    if len(sys.argv) < 2:\n        print('Usage: script.py <file>')\n        sys.exit(1)\n\n    filepath = sys.argv[1]\n    result = process_file(filepath)\n    print(result)\n",
+            content = """
+                #!/usr/bin/env python3
+                import sys
+                from pathlib import Path
+
+                def process_file(filepath: str) -> dict:
+                    '''Process a file and return results.'''
+                    path = Path(filepath)
+                    if not path.exists():
+                        print(f'Error: {filepath} not found', file=sys.stderr)
+                        return {'status': 'error', 'message': f'{filepath} not found'}
+
+                    content = path.read_text()
+                    lines = len(content.splitlines())
+                    words = len(content.split())
+
+                    return {
+                        'status': 'success',
+                        'filename': path.name,
+                        'lines': lines,
+                        'words': words,
+                    }
+
+                if __name__ == '__main__':
+                    if len(sys.argv) < 2:
+                        print('Usage: script.py <file>')
+                        sys.exit(1)
+
+                    filepath = sys.argv[1]
+                    result = process_file(filepath)
+                    print(result)
+            """.trimIndent(),
             category = "python",
         ),
         ScriptTemplate(
             id = "python_api_client",
             name = "API Client Template",
             description = "Python template for making HTTP API requests",
-            content = "#!/usr/bin/env python3\nimport requests\nimport sys\nimport json\n\nAPI_BASE = 'https://api.example.com/v1'\n\ndef make_request(endpoint: str, method: str = \"GET\", data: dict = None) -> dict:\n    '''Make an API request and return the response.'''\n    url = f'{API_BASE}/{endpoint}'\n    headers = {'Content-Type': 'application/json'}\n    try:\n        response = requests.request(\n            method=method,\n            url=url,\n            headers=headers,\n            json=data,\n            timeout=30,\n        )\n        response.raise_for_status()\n        return response.json()\n    except requests.exceptions.RequestException as e:\n        print(f'Request error: {e}', file=sys.stderr)\n        return {'error': str(e)}\n\nif __name__ == '__main__':\n    result = make_request('status')\n    print(json.dumps(result, indent=2))\n",
+            content = """
+                #!/usr/bin/env python3
+                import requests
+                import sys
+                import json
+
+                API_BASE = 'https://api.example.com/v1'
+
+                def make_request(endpoint: str, method: str = "GET", data: dict = None) -> dict:
+                    '''Make an API request and return the response.'''
+                    url = f'{API_BASE}/{endpoint}'
+                    headers = {'Content-Type': 'application/json'}
+                    try:
+                        response = requests.request(
+                            method=method,
+                            url=url,
+                            headers=headers,
+                            json=data,
+                            timeout=30,
+                        )
+                        response.raise_for_status()
+                        return response.json()
+                    except requests.exceptions.RequestException as e:
+                        print(f'Request error: {e}', file=sys.stderr)
+                        return {'error': str(e)}
+
+                if __name__ == '__main__':
+                    result = make_request('status')
+                    print(json.dumps(result, indent=2))
+            """.trimIndent(),
             category = "python",
         ),
         ScriptTemplate(
             id = "node_web_server",
             name = "Simple HTTP Server",
             description = "A minimal Node.js HTTP server template",
-            content = "const http = require('http');\n\nconst hostname = '127.0.0.1';\nconst port = process.env.PORT || 3000;\n\nconst server = http.createServer((req, res) => {\n    console.log(`Request: ${'$'}{req.method} ${'$'}{req.url}`);\n\n    if (req.url === '/') {\n        res.statusCode = 200;\n        res.setHeader('Content-Type', 'application/json');\n        res.end(JSON.stringify({ status: 'ok', timestamp: new Date() }));\n    } else {\n        res.statusCode = 404;\n        res.setHeader('Content-Type', 'text/plain');\n        res.end('Not Found');\n    }\n});\n\nserver.listen(port, hostname, () => {\n    console.log(`Server running at http://${'$'}{hostname}:${'$'}{port}/`);\n});\n",
+            content = """
+                const http = require('http');
+
+                const hostname = '127.0.0.1';
+                const port = process.env.PORT || 3000;
+
+                const server = http.createServer((req, res) => {
+                    console.log(`Request: ${'$'}{req.method} ${'$'}{req.url}`);
+
+                    if (req.url === '/') {
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify({ status: 'ok', timestamp: new Date() }));
+                    } else {
+                        res.statusCode = 404;
+                        res.setHeader('Content-Type', 'text/plain');
+                        res.end('Not Found');
+                    }
+                });
+
+                server.listen(port, hostname, () => {
+                    console.log(`Server running at http://${'$'}{hostname}:${'$'}{port}/`);
+                });
+            """.trimIndent(),
             category = "node",
         ),
         ScriptTemplate(
             id = "powershell_system_info",
             name = "System Info Report",
             description = "Gathers system information on Windows",
-            content = "Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, TotalPhysicalMemory, CsProcessors\n\nWrite-Host '--- Disk Usage ---'\nGet-PSDrive -PSProvider FileSystem | Format-Table Name, Used, Free\n\nWrite-Host '--- Network Adapters ---'\nGet-NetIPAddress -AddressFamily IPv4 | Where-Object {${'$'}_.InterfaceAlias -notmatch 'Loopback'} | Format-Table InterfaceAlias, IPAddress, PrefixLength\n",
+            content = """
+                Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, TotalPhysicalMemory, CsProcessors
+
+                Write-Host '--- Disk Usage ---'
+                Get-PSDrive -PSProvider FileSystem | Format-Table Name, Used, Free
+
+                Write-Host '--- Network Adapters ---'
+                Get-NetIPAddress -AddressFamily IPv4 | Where-Object {${'$'}_.InterfaceAlias -notmatch 'Loopback'} | Format-Table InterfaceAlias, IPAddress, PrefixLength
+            """.trimIndent(),
             category = "powershell",
         ),
     )
