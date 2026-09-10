@@ -106,14 +106,6 @@ class WebhookService : Service() {
         port: Int,
     ) : NanoHTTPD(bindAddress, port) {
         override fun serve(session: IHTTPSession): Response {
-            if (session.method != Method.POST && session.method != Method.GET) {
-                return newFixedLengthResponse(
-                    Response.Status.METHOD_NOT_ALLOWED,
-                    "application/json",
-                    "{\"error\": \"Method not allowed\"}",
-                )
-            }
-
             val uri = session.uri
             return when {
                 uri.startsWith("/trigger/automation/") -> handleAutomationTrigger(uri, session)

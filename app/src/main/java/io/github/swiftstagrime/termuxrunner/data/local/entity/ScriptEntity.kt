@@ -85,6 +85,7 @@ data class ScriptEntity(
             notificationActions = notificationActions,
             foregroundSessionBehavior = foregroundSessionBehavior,
             reuseSession = reuseSession,
+            executionTimeoutMs = executionTimeoutMs,
         )
 }
 

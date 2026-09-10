@@ -213,7 +213,7 @@ private fun GeneralSection(state: AutomationConfigState) {
         TextField(
             value = state.automationCode,
             onValueChange = { state.automationCode = it },
-            label = { Text(stringResource(R.string.adb_code)) },
+            label = { Text(stringResource(R.string.label_automation_trigger_code)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = transparentTextFieldColors(),

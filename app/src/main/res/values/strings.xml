@@ -218,6 +218,8 @@
     <string name="btn_add_preset">Add Preset</string>
     <string name="placeholder_prefix_example">e.g. sudo</string>
     <string name="adb_code">Trigger code (empty = cannot trigger externally)</string>
+    <string name="label_automation_trigger_code">Automation trigger code (empty = cannot trigger externally via ADB/webhook)</string>
+    <string name="menu_share">Share</string>
 
 
     <!-- Repo errors -->

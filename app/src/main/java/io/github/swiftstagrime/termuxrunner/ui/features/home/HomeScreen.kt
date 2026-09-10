@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SortByAlpha
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -130,6 +131,7 @@ data class HomeActions(
     val onTileSettingsClick: () -> Unit,
     val onNavigateToAutomation: () -> Unit,
     val onNavigateToScriptHistory: (Script) -> Unit,
+    val onShareClick: (Script) -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -531,6 +533,7 @@ private fun ScriptList(
                         onDeleteClick = actions.onDeleteScript,
                         onCreateShortcutClick = actions.onCreateShortcutClick,
                         onHistoryClick = actions.onNavigateToScriptHistory,
+                    onShareClick = actions.onShareClick,
                     )
                 }
             }
@@ -571,6 +574,7 @@ private fun ScriptList(
                         onDeleteClick = actions.onDeleteScript,
                         onCreateShortcutClick = actions.onCreateShortcutClick,
                         onHistoryClick = actions.onNavigateToScriptHistory,
+                    onShareClick = actions.onShareClick,
                     )
                 }
             }
@@ -587,6 +591,7 @@ private fun ScriptItem(
     onDeleteClick: (Script) -> Unit,
     onCreateShortcutClick: (Script) -> Unit,
     onHistoryClick: (Script) -> Unit,
+    onShareClick: (Script) -> Unit,
 ) {
     Card(
         modifier =
@@ -661,6 +666,7 @@ private fun ScriptItem(
                     onCreateShortcutClick = onCreateShortcutClick,
                     onDeleteClick = onDeleteClick,
                     onHistoryClick = onHistoryClick,
+                    onShareClick = onShareClick,
                 )
             }
         }
@@ -674,6 +680,7 @@ private fun ScriptContextMenu(
     onCreateShortcutClick: (Script) -> Unit,
     onDeleteClick: (Script) -> Unit,
     onHistoryClick: (Script) -> Unit,
+    onShareClick: (Script) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -753,6 +760,26 @@ private fun ScriptContextMenu(
                 onClick = {
                     showMenu = false
                     onHistoryClick(script)
+                },
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        stringResource(R.string.menu_share),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Share,
+                        null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp),
+                    )
+                },
+                onClick = {
+                    showMenu = false
+                    onShareClick(script)
                 },
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))

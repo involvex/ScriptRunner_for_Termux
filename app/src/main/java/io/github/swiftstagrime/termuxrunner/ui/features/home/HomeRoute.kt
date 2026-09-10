@@ -27,6 +27,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.swiftstagrime.termuxrunner.R
 import io.github.swiftstagrime.termuxrunner.domain.model.InteractionMode
+import io.github.swiftstagrime.termuxrunner.data.local.dto.ScriptExportDto
+import io.github.swiftstagrime.termuxrunner.data.local.dto.toExportDto
 import io.github.swiftstagrime.termuxrunner.domain.model.Script
 import io.github.swiftstagrime.termuxrunner.domain.util.BatteryUtils
 import io.github.swiftstagrime.termuxrunner.domain.util.MiuiUtils
@@ -239,6 +241,16 @@ fun HomeRoute(
                 onTileSettingsClick = onNavigateToTileSettings,
                 onNavigateToAutomation = onNavigateToAutomation,
                 onNavigateToScriptHistory = { script -> onNavigateToScriptHistory(script.id) },
+                onShareClick = { script ->
+                    val exportDto = script.toExportDto(null)
+                    val json = kotlinx.serialization.json.Json { prettyPrint = true }
+                    val content = json.encodeToString(ScriptExportDto.serializer(), exportDto)
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, content)
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.menu_share)))
+                },
             )
         }
 
