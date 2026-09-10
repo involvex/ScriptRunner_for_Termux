@@ -22,6 +22,8 @@ class ScriptExecutionMappingTest {
             runtimeArgs = "--verbose --debug",
             source = ScriptExecutionEntity.ExecutionSource.AUTOMATION,
             errorMessage = null,
+            stdout = "line 1\nline 2",
+            stderr = "warning: something",
         )
 
     @Test
@@ -37,6 +39,8 @@ class ScriptExecutionMappingTest {
         assertEquals("runtimeArgs mismatch", "--verbose --debug", domain.runtimeArgs)
         assertEquals("source mismatch", ExecutionSource.AUTOMATION, domain.source)
         assertNull("errorMessage should be null", domain.errorMessage)
+        assertEquals("stdout mismatch", "line 1\nline 2", domain.stdout)
+        assertEquals("stderr mismatch", "warning: something", domain.stderr)
     }
 
     @Test
@@ -68,6 +72,8 @@ class ScriptExecutionMappingTest {
                 runtimeArgs = "-f test.txt",
                 source = ExecutionSource.TILE,
                 errorMessage = "Some error occurred",
+                stdout = "stdout output",
+                stderr = "stderr output",
             )
 
         val entity = domain.toEntity()
@@ -81,6 +87,8 @@ class ScriptExecutionMappingTest {
         assertEquals("runtimeArgs mismatch", "-f test.txt", entity.runtimeArgs)
         assertEquals("source mismatch", ScriptExecutionEntity.ExecutionSource.TILE, entity.source)
         assertEquals("errorMessage mismatch", "Some error occurred", entity.errorMessage)
+        assertEquals("stdout mismatch", "stdout output", entity.stdout)
+        assertEquals("stderr mismatch", "stderr output", entity.stderr)
     }
 
     @Test
@@ -119,6 +127,8 @@ class ScriptExecutionMappingTest {
                 runtimeArgs = null,
                 source = ScriptExecutionEntity.ExecutionSource.WIDGET,
                 errorMessage = "test error",
+                stdout = "roundtrip stdout",
+                stderr = "roundtrip stderr",
             )
 
         val domain = originalEntity.toDomain()
@@ -163,6 +173,16 @@ class ScriptExecutionMappingTest {
             "errorMessage mismatch after roundtrip",
             originalEntity.errorMessage,
             restoredEntity.errorMessage,
+        )
+        assertEquals(
+            "stdout mismatch after roundtrip",
+            originalEntity.stdout,
+            restoredEntity.stdout,
+        )
+        assertEquals(
+            "stderr mismatch after roundtrip",
+            originalEntity.stderr,
+            restoredEntity.stderr,
         )
     }
 
@@ -224,6 +244,8 @@ class ScriptExecutionMappingTest {
                 runtimeArgs = null,
                 source = ScriptExecutionEntity.ExecutionSource.MANUAL,
                 errorMessage = null,
+                stdout = null,
+                stderr = null,
             )
 
         val domain = entity.toDomain()
@@ -231,6 +253,8 @@ class ScriptExecutionMappingTest {
         assertNull("durationMs should be null", domain.durationMs)
         assertNull("runtimeArgs should be null", domain.runtimeArgs)
         assertNull("errorMessage should be null", domain.errorMessage)
+        assertNull("stdout should be null", domain.stdout)
+        assertNull("stderr should be null", domain.stderr)
         assertEquals("Default source should be MANUAL", ExecutionSource.MANUAL, domain.source)
     }
 }

@@ -51,6 +51,8 @@ data class ScriptExecutionEntity(
                     ExecutionSource.SHORTCUT -> DomainExecutionSource.SHORTCUT
                 },
             errorMessage = errorMessage,
+            stdout = stdout,
+            stderr = stderr,
         )
 }
 

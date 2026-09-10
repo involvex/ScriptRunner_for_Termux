@@ -124,7 +124,9 @@ class ProcessTermuxResultUseCaseTest {
                             exec.scriptName == "AutoScript" &&
                             exec.exitCode == 0 &&
                             exec.source == ExecutionSource.AUTOMATION &&
-                            exec.errorMessage == null
+                            exec.errorMessage == null &&
+                            exec.stdout == null &&
+                            exec.stderr == null
                     },
                 )
             }
@@ -145,7 +147,10 @@ class ProcessTermuxResultUseCaseTest {
                 scriptExecRepo.insert(
                     match { exec ->
                         exec.scriptId == 10 &&
-                            exec.source == ExecutionSource.MANUAL
+                            exec.scriptName == "ManualScript" &&
+                            exec.source == ExecutionSource.MANUAL &&
+                            exec.stdout == null &&
+                            exec.stderr == null
                     },
                 )
             }
@@ -211,6 +216,52 @@ class ProcessTermuxResultUseCaseTest {
                 scriptExecRepo.insert(
                     match { exec ->
                         exec.durationMs == null
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `execute records stdout and stderr in script execution`() =
+        runTest {
+            useCase.execute(
+                automationId = -1,
+                scriptId = 10,
+                scriptName = "StdoutScript",
+                exitCode = 0,
+                internalError = null,
+                stdout = "hello world",
+                stderr = "some warning",
+            )
+
+            coVerify {
+                scriptExecRepo.insert(
+                    match { exec ->
+                        exec.stdout == "hello world" &&
+                            exec.stderr == "some warning"
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `execute with null stdout and stderr does not set them`() =
+        runTest {
+            useCase.execute(
+                automationId = -1,
+                scriptId = 10,
+                scriptName = "NoOutputScript",
+                exitCode = 0,
+                internalError = null,
+                stdout = null,
+                stderr = null,
+            )
+
+            coVerify {
+                scriptExecRepo.insert(
+                    match { exec ->
+                        exec.stdout == null &&
+                            exec.stderr == null
                     },
                 )
             }
