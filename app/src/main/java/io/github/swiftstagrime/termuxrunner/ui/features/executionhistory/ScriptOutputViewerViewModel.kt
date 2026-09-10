@@ -3,8 +3,10 @@ package io.github.swiftstagrime.termuxrunner.ui.features.executionhistory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.swiftstagrime.termuxrunner.di.IoDispatcher
 import io.github.swiftstagrime.termuxrunner.domain.model.ScriptExecution
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptExecutionRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,12 +17,13 @@ class ScriptOutputViewerViewModel
     @Inject
     constructor(
         private val scriptExecutionRepository: ScriptExecutionRepository,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow<ScriptOutputUiState>(ScriptOutputUiState.Loading)
         val uiState = _uiState.asStateFlow()
 
         fun load(executionId: Long) {
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 val execution = scriptExecutionRepository.getExecutionById(executionId)
                 if (execution != null) {
                     _uiState.value = ScriptOutputUiState.Success(execution)

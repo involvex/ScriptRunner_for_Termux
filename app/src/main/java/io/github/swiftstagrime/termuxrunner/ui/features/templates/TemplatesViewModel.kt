@@ -2,8 +2,10 @@ package io.github.swiftstagrime.termuxrunner.ui.features.templates
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.swiftstagrime.termuxrunner.di.IoDispatcher
 import io.github.swiftstagrime.termuxrunner.domain.model.ScriptTemplate
 import io.github.swiftstagrime.termuxrunner.domain.repository.ScriptTemplateRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,6 +16,7 @@ class TemplatesViewModel
     @Inject
     constructor(
         private val templateRepository: ScriptTemplateRepository,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow<TemplatesUiState>(TemplatesUiState.Loading)
         val uiState = _uiState.asStateFlow()
@@ -23,7 +26,7 @@ class TemplatesViewModel
         }
 
         fun loadTemplates() {
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 _uiState.value = TemplatesUiState.Success(templateRepository.getTemplates())
             }
         }
@@ -33,7 +36,7 @@ class TemplatesViewModel
                 loadTemplates()
                 return
             }
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 val results = templateRepository.searchTemplates(query)
                 _uiState.value = TemplatesUiState.Success(results)
             }
