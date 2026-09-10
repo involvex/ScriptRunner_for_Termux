@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
@@ -200,7 +201,7 @@ private fun TemplateListWithSearch(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                 modifier = Modifier.fillMaxWidth().testTag("templates_search_field"),
                 textStyle = TextStyle(fontSize = 16.sp),
             )
         }
@@ -224,6 +225,7 @@ private fun TemplateCard(
             Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
+                .testTag("template_card_${template.id}")
                 .clickable { onClick() }
                 .background(
                     MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
